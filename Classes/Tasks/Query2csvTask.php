@@ -66,21 +66,26 @@ class Query2csvTask extends BaseEmailTask
         $this->query = preg_replace('#\r\n#', ' ', $this->query);
 
         $mailSubject = $this->subject ?: $this->getDefaultSubject('query2csv');
+
+        // Construct the filename with date-time if necessary
+        $baseFilename = str_replace('.csv', '', $this->filename);
+        if ($this->noDatetimeFlag == 0) {
+            $finalFilename = $baseFilename . date('-Y-m-d_Hi') . '.csv';
+        } else {
+            $finalFilename = $baseFilename . '.csv';
+        }
+
         $path = GeneralUtility::makeInstance(CsvExportManager::class)
             ->setQuery($this->query)
             ->setDelimiter($this->delimiter)
             ->setEnclosure($this->enclosure)
             ->setEscape($this->escape)
             ->setNoHeader((bool)$this->noHeader)
-            ->renderFile($this->filename);
-        $filename = str_replace('.csv', '', $this->filename);
-        if ($this->noDatetimeFlag == 0) {
-            $filename .= date('-Y-m-d_Hi');
-        }
+            ->renderFile($finalFilename); // Pass the final filename here
 
-        $filename .= '.csv';
         if (!empty($this->email)) {
-            Utils::sendEmail($this->email, $mailSubject, $this->body, 'plain', 'utf-8', [$filename => $path]);
+            // Use the final filename for the email attachment
+            Utils::sendEmail($this->email, $mailSubject, $this->body, 'plain', 'utf-8', [$finalFilename => $path]);
         }
 
         unlink($path);
