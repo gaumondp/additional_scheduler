@@ -34,7 +34,6 @@ class CsvExportManager extends QueryExportManager
     protected $noHeader = false;
 
     /**
-     * @param bool $noHeader
      * @return $this
      */
     public function setNoHeader(bool $noHeader)
@@ -44,7 +43,6 @@ class CsvExportManager extends QueryExportManager
     }
 
     /**
-     * @param string $delimiter
      * @return $this
      */
     public function setDelimiter(string $delimiter)
@@ -54,7 +52,6 @@ class CsvExportManager extends QueryExportManager
     }
 
     /**
-     * @param string $enclosure
      * @return $this
      */
     public function setEnclosure(string $enclosure)
@@ -64,7 +61,6 @@ class CsvExportManager extends QueryExportManager
     }
 
     /**
-     * @param string $escape
      * @return $this
      */
     public function setEscape(string $escape)
@@ -76,14 +72,13 @@ class CsvExportManager extends QueryExportManager
     /**
      * Create a temporary csv file and return its path
      *
-     * @param string $filename
      * @return string - the path to the csv file
      */
     public function renderFile(string $filename): string
     {
         $temp = tempnam(sys_get_temp_dir(), $filename);
         $handle = fopen($temp, 'w');
-        fputs($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+        fwrite($handle, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
         $addHeader = !$this->noHeader;
         $this->parseResultSet(function ($row) use ($handle, $addHeader): void {
             static $first = true;

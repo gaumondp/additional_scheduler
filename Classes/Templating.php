@@ -27,10 +27,6 @@ class Templating
 
     /**
      * Loads a template file
-     *
-     * @param string $templateFile
-     * @param bool   $debug
-     * @return bool
      */
     public function initTemplate(string $templateFile, bool $debug = false): bool
     {
@@ -54,9 +50,6 @@ class Templating
     /**
      * Template rendering for subdatas and principal datas
      *
-     * @param array  $templateMarkers
-     * @param string $templateSection
-     * @param bool   $debug
      * @return string HTML code
      */
     public function renderAllTemplate(array $templateMarkers, string $templateSection, bool $debug = false): string
@@ -90,10 +83,6 @@ class Templating
 
     /**
      * Render a single part with array and section
-     *
-     * @param array  $templateMarkers
-     * @param string $templateSection
-     * @return string
      */
     public function renderSingle(array $templateMarkers, string $templateSection): string
     {
@@ -155,7 +144,6 @@ class Templating
     /**
      * Clean a template string (remove blank lines...)
      *
-     * @param string $content
      * @return mixed
      */
     protected function cleanTemplate(string $content)

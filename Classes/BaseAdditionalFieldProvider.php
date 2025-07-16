@@ -29,6 +29,7 @@ abstract class BaseAdditionalFieldProvider extends AbstractAdditionalFieldProvid
      * @var string
      */
     protected $pluginNS = 'additionalscheduler';
+
     /**
      * The locallang path
      *
@@ -39,7 +40,6 @@ abstract class BaseAdditionalFieldProvider extends AbstractAdditionalFieldProvid
     /**
      * Task namespace, mainly to compute formfield names
      *
-     * @return string
      * @see BaseAdditionalFieldProvider::getFieldName()
      */
     abstract protected function getTaskNs(): string;
@@ -47,8 +47,6 @@ abstract class BaseAdditionalFieldProvider extends AbstractAdditionalFieldProvid
     /**
      * Code template repository
      * override this function to add your own templates
-     *
-     * @return array
      */
     protected function getCodeTemplates(): array
     {
@@ -77,16 +75,11 @@ abstract class BaseAdditionalFieldProvider extends AbstractAdditionalFieldProvid
      *   'bar' => ['code' => 'input', 'extraAttributes' => 'class="baz"', 'default' => 'biz'],
      * ]
      * By implementing this method, fields will be auto-added to the form
-     *
-     * @return array
      */
     abstract protected function getFields(): array;
 
     /**
      * Compute the fieldname, based on plugin and task namespaces
-     *
-     * @param string $field
-     * @return string
      */
     protected function getFieldName(string $field): string
     {
@@ -97,8 +90,8 @@ abstract class BaseAdditionalFieldProvider extends AbstractAdditionalFieldProvid
      * Gets additional fields to render in the form to add/edit a task
      *
      * @param array $taskInfo Values of the fields from the add/edit task form
-     * @param \TYPO3\CMS\Scheduler\Task\AbstractTask|null $task The task object being edited. Null when adding a task!
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule Reference to the scheduler backend module
+     * @param AbstractTask|null $task The task object being edited. Null when adding a task!
+     * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
      * @return array A two dimensional array: array('fieldId' => array('code' => '', 'label' => '', 'cshKey' => '', 'cshLabel' => ''))
      */
     public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule): array
@@ -130,10 +123,6 @@ abstract class BaseAdditionalFieldProvider extends AbstractAdditionalFieldProvid
         return $additionalFields;
     }
 
-    /**
-     * @param array        $taskInfo
-     * @param AbstractTask|null $task
-     */
     protected function initFields(array &$taskInfo, ?AbstractTask $task, SchedulerModuleController $parentObject): void
     {
         foreach ($this->getFields() as $field => $data) {
@@ -154,12 +143,13 @@ abstract class BaseAdditionalFieldProvider extends AbstractAdditionalFieldProvid
 
     protected function addErrorMessage (string $message, ...$values) {
         $message = $GLOBALS['LANG']->sL($this->locallangPath . ':' . $message);
-        if (!empty($values)) {
+        if ($values !== []) {
             $message = sprintf($message, ...$values);
         }
+
         $version = GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion();
         if ($version === 11) {
-            $this->addMessage($message, FlashMessage::ERROR);
+            $this->addMessage($message, ContextualFeedbackSeverity::ERROR);
         } else {
             $this->addMessage($message, ContextualFeedbackSeverity::ERROR);
         }

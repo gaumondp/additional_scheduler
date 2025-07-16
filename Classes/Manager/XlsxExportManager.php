@@ -10,7 +10,8 @@ namespace Sng\Additionalscheduler\Manager;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
+use RuntimeException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -18,13 +19,9 @@ use TYPO3\CMS\Core\Core\Environment; // Added import
 
 class XlsxExportManager extends QueryExportManager
 {
-    /**
-     * @var bool
-     */
     protected bool $noHeader = false;
 
     /**
-     * @param bool $noHeader
      * @return $this
      */
     public function setNoHeader(bool $noHeader): self
@@ -40,12 +37,12 @@ class XlsxExportManager extends QueryExportManager
      * @return string - the path to the xlsx file
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function renderFile(string $filename): string
     {
         if (!class_exists(Spreadsheet::class)) {
-            throw new \RuntimeException('PhpSpreadsheet library is not available. Please install it via Composer: composer require phpoffice/phpspreadsheet');
+            throw new RuntimeException('PhpSpreadsheet library is not available. Please install it via Composer: composer require phpoffice/phpspreadsheet');
         }
 
         $spreadsheet = new Spreadsheet();
@@ -62,6 +59,7 @@ class XlsxExportManager extends QueryExportManager
                     $sheet->setCellValue($col . $rowNumber, $headerCell);
                     $col++;
                 }
+
                 $rowNumber++;
                 $first = false;
             }
@@ -71,6 +69,7 @@ class XlsxExportManager extends QueryExportManager
                 $sheet->setCellValue($col . $rowNumber, $dataCell);
                 $col++;
             }
+
             $rowNumber++;
         });
 
@@ -79,6 +78,7 @@ class XlsxExportManager extends QueryExportManager
         if (!is_dir($tempDirParent)) {
             GeneralUtility::mkdir_deep($tempDirParent); // Ensure the parent directory exists
         }
+
         // Specific subdirectory for this extension's temp files
         $tempDir = $tempDirParent . '/additional_scheduler_xlsx';
         if (!is_dir($tempDir)) {
@@ -88,9 +88,10 @@ class XlsxExportManager extends QueryExportManager
 
         // Ensure the input filename has a base name for uniqid
         $baseFilename = basename($filename, '.xlsx');
-        if (empty(trim($baseFilename))) {
+        if (in_array(trim($baseFilename), ['', '0'], true)) {
             $baseFilename = 'export'; // Default base if original was empty or just ".xlsx"
         }
+
         // Further sanitize baseFilename to remove characters that might cause issues
         $sanitizedBaseFilename = preg_replace('/[^a-zA-Z0-9_-]/', '', $baseFilename);
         if (empty($sanitizedBaseFilename)) {
@@ -101,7 +102,7 @@ class XlsxExportManager extends QueryExportManager
         $tempFilename = uniqid($sanitizedBaseFilename . '_', true) . '.xlsx';
         $tempFilePath = GeneralUtility::getFileAbsFileName($tempDir . '/' . $tempFilename);
 
-        if (empty($tempFilePath)) {
+        if ($tempFilePath === '' || $tempFilePath === '0') {
             // Log details if possible, or make the exception more informative
             $debugInfo = sprintf(
                 "Failed to get absolute path. Temp dir: '%s', Temp filename: '%s', Calculated full path before getFileAbsFileName: '%s'",
@@ -109,7 +110,7 @@ class XlsxExportManager extends QueryExportManager
                 $tempFilename,
                 $tempDir . '/' . $tempFilename
             );
-            throw new \RuntimeException('Could not generate a valid temporary file path. ' . $debugInfo);
+            throw new RuntimeException('Could not generate a valid temporary file path. ' . $debugInfo);
         }
 
         $writer = new Xlsx($spreadsheet);

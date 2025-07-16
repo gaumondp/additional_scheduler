@@ -34,8 +34,6 @@ class Cleart3tempTask extends AbstractTask
      * Note that there is no error handling, errors and failures are expected
      * to be handled and logged by the client implementations.
      * Should return true on successful execution, false on error.
-     *
-     * @return bool
      */
     public function execute(): bool
     {
@@ -50,10 +48,6 @@ class Cleart3tempTask extends AbstractTask
 
     /**
      * Delete all files of a directory older than x days
-     *
-     * @param string $dirname
-     * @param int    $nbdays
-     * @return bool
      */
     public function emptyDirectory(string $dirname, int $nbdays): bool
     {
@@ -86,7 +80,7 @@ class Cleart3tempTask extends AbstractTask
                         }
                     } else {
                         $this->stats['nbdirectories']++;
-                        $this->emptyDirectory($absoluteFileName, (int)$nbdays);
+                        $this->emptyDirectory($absoluteFileName, $nbdays);
                     }
                 }
             }
@@ -103,8 +97,6 @@ class Cleart3tempTask extends AbstractTask
      * that may help to set it apart from other tasks from the same class
      * This additional information is used - for example - in the Scheduler's BE module
      * This method should be implemented in most task classes
-     *
-     * @return string
      */
     public function getAdditionalInformation(): string
     {

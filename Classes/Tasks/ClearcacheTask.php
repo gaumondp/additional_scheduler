@@ -20,8 +20,6 @@ class ClearcacheTask extends AbstractTask
     /**
      * Executes the commit task and returns TRUE if the execution was
      * succesfull
-     *
-     * @return bool
      */
     public function execute(): bool
     {

@@ -10,7 +10,8 @@ namespace Sng\Additionalscheduler\Tasks;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use RuntimeException;
 use Sng\Additionalscheduler\BaseEmailTask;
 use Sng\Additionalscheduler\Manager\XlsxExportManager;
 use Sng\Additionalscheduler\Utils;
@@ -32,7 +33,6 @@ class Query2xlsxTask extends BaseEmailTask
      * @var string
      */
     public $filename; // This should be populated by TYPO3 scheduler from saved configuration
-
     /**
      * @var int
      */
@@ -44,7 +44,6 @@ class Query2xlsxTask extends BaseEmailTask
     public $body;
 
     /**
-     * @return bool
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
@@ -55,13 +54,13 @@ class Query2xlsxTask extends BaseEmailTask
         $mailSubject = $this->subject ?: $this->getDefaultSubject('query2xlsx');
 
         // Ensure PhpSpreadsheet is available
-        if (!class_exists(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)) {
-            throw new \RuntimeException('PhpSpreadsheet library is not available for Query2xlsxTask. Please install it via Composer.');
+        if (!class_exists(Spreadsheet::class)) {
+            throw new RuntimeException('PhpSpreadsheet library is not available for Query2xlsxTask. Please install it via Composer.');
         }
 
         // Fallback for filename if it's empty
         $currentFilename = trim($this->filename ?? '');
-        if (empty($currentFilename)) {
+        if ($currentFilename === '' || $currentFilename === '0') {
             $currentFilename = 'data.xlsx'; // Default filename
         }
 

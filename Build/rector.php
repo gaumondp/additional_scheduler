@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\Configuration\Option;
-use Rector\Core\ValueObject\PhpVersion;
+use Rector\ValueObject\PhpVersion;
 use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\PostRector\Rector\NameImportingPostRector;
@@ -15,8 +15,6 @@ use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
 use Ssch\TYPO3Rector\Set\Typo3SetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $parameters = $rectorConfig->parameters();
-
     // php
     $rectorConfig->import(SetList::CODE_QUALITY);
     $rectorConfig->import(SetList::CODING_STYLE);
@@ -35,11 +33,8 @@ return static function (RectorConfig $rectorConfig): void {
 
     // typo3
     $rectorConfig->sets([
-        Typo3LevelSetList::UP_TO_TYPO3_11,
+        Typo3LevelSetList::UP_TO_TYPO3_13,
     ]);
-    $rectorConfig->import(Typo3SetList::UNDERSCORE_TO_NAMESPACE);
-    $rectorConfig->import(Typo3SetList::EXTBASE_COMMAND_CONTROLLERS_TO_SYMFONY_COMMANDS);
-    $rectorConfig->import(Typo3SetList::DATABASE_TO_DBAL);
 
     // In order to have a better analysis from phpstan we teach it here some more things
     $rectorConfig->phpstanConfig(Typo3Option::PHPSTAN_FOR_RECTOR_PATH);
@@ -50,8 +45,6 @@ return static function (RectorConfig $rectorConfig): void {
     // Disable parallel otherwise non php file processing is not working i.e. typoscript
     $rectorConfig->disableParallel();
 
-    // this will not import root namespace classes, like \DateTime or \Exception
-    $rectorConfig->disableImportShortClasses();
 
     // Define your target version which you want to support
     $rectorConfig->phpVersion(PhpVersion::PHP_74);
@@ -85,7 +78,7 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     // is there single rule you don't like from a set you use?
-//    $parameters->set(Option::EXCLUDE_RECTORS, [
+//    $rectorConfig->ruleWithConfiguration(Option::EXCLUDE_RECTORS, [
 //        \Rector\Php71\Rector\FuncCall\CountOnNullRector::class,
 //        \Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector::class,
 //        \Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector::class,

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Metrics\CyclomaticComplexitySniff;
 use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
@@ -39,7 +40,7 @@ return static function (ECSConfig $ecsConfig): void {
         dirname(__DIR__) . '/Build/*',
         dirname(__DIR__) . '/.Build/*',
         TrailingCommaInMultilineFixer::class,
-        \PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer::class,
+        YodaStyleFixer::class,
         PhpUnitStrictFixer::class,
         PhpUnitTestAnnotationFixer::class,
         ArrayOpenerAndCloserNewlineFixer::class,

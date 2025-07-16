@@ -10,7 +10,7 @@ namespace Sng\Additionalscheduler\Tasks;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
+use ErrorException;
 use Sng\Additionalscheduler\BaseEmailTask;
 use Sng\Additionalscheduler\Utils;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -29,7 +29,7 @@ class SavewebsiteTask extends BaseEmailTask
         // exec SH
         $saveScript = GeneralUtility::getFileAbsFileName('EXT:additional_scheduler/Resources/Shell/save_typo3_website.sh');
         if (!is_executable($saveScript)) {
-            throw new \ErrorException($saveScript . ' must be executable');
+            throw new ErrorException($saveScript . ' must be executable');
         }
 
         $dbname = $GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'];

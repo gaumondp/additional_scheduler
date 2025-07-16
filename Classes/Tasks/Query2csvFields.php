@@ -17,9 +17,6 @@ use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 
 class Query2csvFields extends BaseAdditionalFieldProvider
 {
-    /**
-     * @return bool
-     */
     public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $parentObject): bool
     {
         $result = true;
@@ -40,8 +37,6 @@ class Query2csvFields extends BaseAdditionalFieldProvider
      *   'bar' => ['code' => 'input', 'extraAttributes' => 'class="baz"],
      * ]
      * By implementing this method, fields will be auto-added to the form
-     *
-     * @return array
      */
     protected function getFields(): array
     {
@@ -59,9 +54,6 @@ class Query2csvFields extends BaseAdditionalFieldProvider
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getTaskNs(): string
     {
         return 'query2csv';

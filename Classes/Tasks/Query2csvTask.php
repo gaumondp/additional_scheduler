@@ -58,9 +58,6 @@ class Query2csvTask extends BaseEmailTask
      */
     public $body;
 
-    /**
-     * @return bool
-     */
     public function execute(): bool
     {
         $this->query = preg_replace('#\r\n#', ' ', $this->query);

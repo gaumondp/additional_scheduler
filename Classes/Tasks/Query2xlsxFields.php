@@ -10,15 +10,13 @@ namespace Sng\Additionalscheduler\Tasks;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use Sng\Additionalscheduler\BaseAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 
 class Query2xlsxFields extends BaseAdditionalFieldProvider
 {
-    /**
-     * @return bool
-     */
     public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $parentObject): bool
     {
         $result = true;
@@ -37,11 +35,11 @@ class Query2xlsxFields extends BaseAdditionalFieldProvider
 
         // Basic check for PhpSpreadsheet library presence.
         // This message will appear in the scheduler module if the class is not found.
-        if (!class_exists(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)) {
+        if (!class_exists(Spreadsheet::class)) {
             $this->addFlashMessage(
                 'PhpSpreadsheet library not found. Please install it using Composer: "composer require phpoffice/phpspreadsheet". XLSX export will not work.',
                 'XLSX Library Missing',
-                \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING // Or ::ERROR depending on desired severity
+                ContextualFeedbackSeverity::WARNING // Or ::ERROR depending on desired severity
             );
             // Optionally, prevent saving the task or return false if it's critical
             // For now, just a warning. The task execution will fail more clearly.
@@ -54,8 +52,6 @@ class Query2xlsxFields extends BaseAdditionalFieldProvider
     /**
      * Field structure
      * keys are field's names, values form field data
-     *
-     * @return array
      */
     protected function getFields(): array
     {
@@ -70,9 +66,6 @@ class Query2xlsxFields extends BaseAdditionalFieldProvider
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getTaskNs(): string
     {
         return 'query2xlsx';

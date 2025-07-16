@@ -29,9 +29,6 @@ class ExecqueryTask extends BaseEmailTask
      */
     public $query;
 
-    /**
-     * @return bool
-     */
     public function execute(): bool
     {
         $this->query = preg_replace('#\r\n#', ' ', $this->query);
@@ -105,8 +102,6 @@ class ExecqueryTask extends BaseEmailTask
      * that may help to set it apart from other tasks from the same class
      * This additional information is used - for example - in the Scheduler's BE module
      * This method should be implemented in most task classes
-     *
-     * @return string
      */
     public function getAdditionalInformation(): string
     {

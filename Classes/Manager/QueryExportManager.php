@@ -23,10 +23,6 @@ class QueryExportManager
      */
     protected $query;
 
-    /**
-     * @param string $query
-     * @return QueryExportManager
-     */
     public function setQuery(string $query): QueryExportManager
     {
         $this->query = $query;

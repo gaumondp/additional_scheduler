@@ -31,7 +31,6 @@ class Cleart3tempFields extends BaseAdditionalFieldProvider
     /**
      * Task namespace, mainly to compute formfield names
      *
-     * @return string
      * @see BaseAdditionalFieldProvider::getFieldName()
      */
     protected function getTaskNs(): string
@@ -48,8 +47,6 @@ class Cleart3tempFields extends BaseAdditionalFieldProvider
      *   'bar' => ['code' => 'input', 'extraAttributes' => 'class="baz"', 'default' => 'biz'],
      * ]
      * By implementing this method, fields will be auto-added to the form
-     *
-     * @return array
      */
     protected function getFields(): array
     {
