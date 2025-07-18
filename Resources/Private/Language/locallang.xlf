@@ -127,6 +127,9 @@
 			<trans-unit id="task.translationupdate.name">
 				<source><![CDATA[Update the TYPO3 translations]]></source>
 			</trans-unit>
+            <trans-unit id="phpspreadsheet-not-installed">
+                <source><![CDATA[PhpSpreadsheet library not found. Please install it using Composer: "composer require phpoffice/phpspreadsheet". XLSX export will not work.]]></source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

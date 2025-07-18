@@ -144,6 +144,9 @@
             <trans-unit id="task.fixmigrationto1_4.name">
                 <target><![CDATA[Réparer la migration à la version 1.4 (si vous avez des tâches en erreur après la mise à jour)]]></target>
             </trans-unit>
+            <trans-unit id="phpspreadsheet-not-installed">
+                <source><![CDATA[PhpSpreadsheet non trouvé. Veuillez l’installer avec Composer : «composer require phpoffice/phpspreadsheet». L’exportation en XLSX ne fonctionnera pas.]]></source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

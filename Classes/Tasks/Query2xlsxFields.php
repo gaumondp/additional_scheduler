@@ -11,7 +11,6 @@ namespace Sng\Additionalscheduler\Tasks;
  * LICENSE.txt file that was distributed with this source code.
  */
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use Sng\Additionalscheduler\BaseAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 
@@ -32,17 +31,10 @@ class Query2xlsxFields extends BaseAdditionalFieldProvider
             $submittedData[$this->getFieldName('filename')] .= '.xlsx';
         }
 
-
         // Basic check for PhpSpreadsheet library presence.
         // This message will appear in the scheduler module if the class is not found.
         if (!class_exists(Spreadsheet::class)) {
-            $this->addFlashMessage(
-                'PhpSpreadsheet library not found. Please install it using Composer: "composer require phpoffice/phpspreadsheet". XLSX export will not work.',
-                'XLSX Library Missing',
-                ContextualFeedbackSeverity::WARNING // Or ::ERROR depending on desired severity
-            );
-            // Optionally, prevent saving the task or return false if it's critical
-            // For now, just a warning. The task execution will fail more clearly.
+            $this->addErrorMessage("phpspreadsheet-not-installed");
         }
 
 
